@@ -63,6 +63,28 @@ def add_item(inventory):
     save_inventory(inventory, INVENTORY_FILE)
     print("Item added succesfully.")
 
+def remove_item(inventory):
+    view_inventory(inventory)
+    
+    if not inventory:
+        print("Inventory is empty.")
+        return
+    
+    try:
+        item = int(input("\nEnter the item number to remove: "))
+    except ValueError:
+        print("Item number must be a whole number.")
+        return
+        
+    if item < 1 or item > len(inventory):
+        print("Must be a valid item number.")
+        return
+
+
+    removed_item = inventory.pop(item - 1)
+    print(f"Item removed: {removed_item['name']}")
+    save_inventory(inventory, INVENTORY_FILE)
+
 def update_quantity(inventory):
 
     view_inventory(inventory)
@@ -143,7 +165,7 @@ def main():
         elif choice == "3":
             update_quantity(inventory)
         elif choice == "4":
-            pass
+            remove_item(inventory)
         elif choice == "5":
             pass
         elif choice == "6":
