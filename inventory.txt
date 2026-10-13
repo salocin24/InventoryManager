@@ -1,0 +1,3 @@
+Laptop Charger|Electronics|8
+Printer Paper|Office Supplies|25
+Dry-Erase Markers|Classroom Supplies|4
