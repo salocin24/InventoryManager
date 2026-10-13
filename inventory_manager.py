@@ -116,6 +116,58 @@ def update_quantity(inventory):
     save_inventory(inventory, INVENTORY_FILE)
     print(f"Updated '{inventory[item - 1]['name']}' to quantity {new_quantity}.")
 
+def search_inventory(inventory):
+    name = input("Enter all or part of an item name you're searching for: ").strip()
+
+    if not name:
+        print("Search term cannot be empty.")
+        return
+
+    matches = []
+    for i in inventory:
+        if name.lower() in i["name"].lower():
+            matches.append(i)
+
+    if not matches:
+        print(f"No items found matching '{item}'.")
+        return
+
+    print("\nMatching Items:")
+    for number, item in enumerate(matches, start=1):
+        print(f"{number}. {item["name"]} | {item["category"]} | Quantity: {item["quantity"]}")
+
+def display_summary(inventory):
+    low_stock_threshold = 5
+
+    unique = len(inventory)
+    total_quantity = 0
+    low_stock_items = 0
+
+    # Fill a temp dictionary with every category so we can count items per
+    category_counts = {}
+    for item in inventory:
+        category = item["category"].lower()
+        category_counts[category] = 0
+
+    for item in inventory:
+        quantity = int(item["quantity"])
+        total_quantity += quantity
+        if quantity < low_stock_threshold:
+            low_stock_items += 1
+
+        category = item["category"].lower()
+        category_counts[category] += 1
+
+    print("\nInventory Summary")
+    print(f"Unique items: {unique}")
+    print(f"Total quantity: {total_quantity}")
+    print(f"Low-stock items: {low_stock_items}")
+
+    print("\nItems per category:")
+    for category, count in category_counts.items():
+        print(f"{category}: {count}")
+    
+
 def view_inventory(inventory):
     """Display all entries in the inventory"""
     if not inventory:
@@ -167,9 +219,9 @@ def main():
         elif choice == "4":
             remove_item(inventory)
         elif choice == "5":
-            pass
+            search_inventory(inventory)
         elif choice == "6":
-            pass
+            display_summary(inventory)
         elif choice == "7":
             print("Goodbye!")
             break
