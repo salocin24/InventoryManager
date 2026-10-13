@@ -3,4 +3,4 @@ Printer Paper|Office Supplies|25
 Dry-Erase Markers|Classroom Supplies|4
 Raspberry Pi|Electronics|2
 Test|Classroom Supplies|5
-Printer Ink|Office Supplies|1
+Printer Ink|Office Supplies|2

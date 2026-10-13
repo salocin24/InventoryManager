@@ -19,6 +19,7 @@ def display_menu():
     print("7. Exit")
 
 def add_item(inventory):
+    """Add an item/entry to the inventory"""
     illegal = "|"
     name = input("Item's name: ").strip()
     
@@ -62,7 +63,36 @@ def add_item(inventory):
     save_inventory(inventory, INVENTORY_FILE)
     print("Item added succesfully.")
 
+def update_quantity(inventory):
 
+    view_inventory(inventory)
+
+    if not inventory:
+        print("Inventory is empty.")
+        return
+
+    try:
+        item = int(input("\nEnter the item number to update: "))
+    except ValueError:
+            print("Item number must be a whole number.")
+            return
+    
+    if item < 1 or item > len(inventory):
+        print("Must be a valid item number.")
+        return
+    
+    try:
+        new_quantity = int(input("Enter the new quantity: "))
+    except ValueError:
+        print("New quantity must be a whole number.")
+        return
+    if (new_quantity < 0):
+        print("New quantity cannot be negative.")
+        return
+
+    inventory[item - 1]["quantity"] = new_quantity
+    save_inventory(inventory, INVENTORY_FILE)
+    print(f"Updated '{inventory[item - 1]['name']}' to quantity {new_quantity}.")
 
 def view_inventory(inventory):
     """Display all entries in the inventory"""
@@ -111,7 +141,7 @@ def main():
         elif choice == "2":
             add_item(inventory)
         elif choice == "3":
-            pass
+            update_quantity(inventory)
         elif choice == "4":
             pass
         elif choice == "5":
