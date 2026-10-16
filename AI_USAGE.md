@@ -48,7 +48,7 @@ I wrote most of the program myself and used Claude mainly to review my code agai
 
 ### `search_inventory()`
 
-The function asks for a search term and strips any spaces off. If nothing is left it shows an error and goes back to the main menu. If not, it loops through every item and lowercases both the search term and the item's name making it case insenstivie. It uses `in` to check whether the term appears anywhere inside the name, which is what makes partial matches work like how `rasp` matches "Raspberry Pi." Each match is added to a list. If the list is empty, the function prints a "No items found" message. If not, it prints each match with a number using `enumerate()`.
+The function asks for a search term and strips any spaces off. If nothing is left it shows an error and goes back to the main menu. If not, it loops through every item and lowercases both the search term and the item's name making it case insensitive. It uses `in` to check whether the term appears anywhere inside the name, which is what makes partial matches work like how `rasp` matches "Raspberry Pi." Each match is added to a list. If the list is empty, the function prints a "No items found" message. If not, it prints each match with a number using `enumerate()`.
 
 ### `display_summary()`
 

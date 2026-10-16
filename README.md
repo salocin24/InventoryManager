@@ -32,7 +32,7 @@ Inventory Manager is a menu-driven Python program for tracking items, their cate
 Check your Python version:
 
 ```bash
-python3 --version
+python --version
 ```
 
 ## Project Files
@@ -42,6 +42,10 @@ python3 --version
 | `inventory_manager.py` | The main program: menu, inventory operations, and file load/save logic |
 | `inventory.txt` | The inventory data file, read on startup and rewritten after each change |
 | `README.md` | Project documentation (this file) |
+| `TESTING.md` | Testing project functionality |
+| `AI_USAGE.md` | Project AI usage documentation |
+
+
 
 ## Inventory Data Format
 
@@ -78,16 +82,10 @@ Blank lines are skipped when the file is loaded. If `inventory.txt` does not exi
 
 2. Run the program from inside the project folder:
 
-   **Linux / macOS:**
-
-   ```bash
-   python3 inventory_manager.py
-   ```
-
    **Windows (PowerShell or Command Prompt):**
 
    ```powershell
-   py inventory_manager.py
+   python inventory_manager.py
    ```
 
 > **Note:** Run the program from the project folder. `inventory.txt` is opened relative to the current working directory, so running it from elsewhere will start with an empty inventory.
