@@ -119,7 +119,26 @@ def update_quantity(inventory):
     save_inventory(inventory, INVENTORY_FILE)
     print(f"Updated '{inventory[item - 1]['name']}' to quantity {new_quantity}.")
 
+def search_inventory(inventory):
+    """Searches the inventory given a full or partial item name"""
+    name = input("Enter all or part of an item name you're searching for: ").strip()
 
+    if not name:
+        print("Search term cannot be empty.")
+        return
+
+    matches = []
+    for i in inventory:
+        if name.lower() in i["name"].lower():
+            matches.append(i)
+
+    if not matches:
+        print(f"No items found matching '{item}'.")
+        return
+
+    print("\nMatching Items:")
+    for number, item in enumerate(matches, start=1):
+        print(f"{number}. {item["name"]} | {item["category"]} | Quantity: {item["quantity"]}")
 
 def display_summary(inventory):
     """Displays general summarized information of a given inventory"""
@@ -205,8 +224,7 @@ def main():
         elif choice == "4":
             remove_item(inventory)
         elif choice == "5":
-            #search_inventory(inventory)
-            pass
+            search_inventory(inventory)
         elif choice == "6":
             display_summary(inventory)
         elif choice == "7":
