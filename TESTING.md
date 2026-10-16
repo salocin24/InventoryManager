@@ -12,6 +12,6 @@
 | 10 | Remove an item | Remove a valid item | Program should accept the change and write the difference to the .txt file | The program accepted the change and displayed what item was removed | Pass
 | 11 | Search inventory | Perform a case-insensitive partial search | Should the term match partially to a present item, the program should respond with the correct item | The program displayed the correct item `"1. Raspberry Pi ... Quantity: 3"` when entering the search term `"rasp"` | Pass 
 | 12 | Search inventory | Searching when no matches exist | Program should display a message to the effect of `"No matching items"` | Program crashed when entering terms that do not match | Fail
-| 12* | Search inventory | Searching when no matches exist | Program should display a message to the effect of `"No matching items"` | Program now displays `"No items fond matching '{item}'."` | Pass
+| 12* | Search inventory | Searching when no matches exist | Program should display a message to the effect of `"No matching items"` | Program now displays `"No items found matching '{item}'."` | Pass
 | 13 | View inventory summary | Verifiying the inventory summary | Program should display a short summary of unique, low stock, and total items | Program correctly displays the inventory summary | Pass
 | 14 | save_inventory() | Restarting the program and confirming persistence | Program should keep all added/removed inventory items from a previous instance | Program correctly kept all added/removed inventory items from a previous instance | Pass
