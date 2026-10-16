@@ -133,7 +133,7 @@ def search_inventory(inventory):
             matches.append(i)
 
     if not matches:
-        print(f"No items found matching '{item}'.")
+        print(f"No items found matching '{name}'.")
         return
 
     print("\nMatching Items:")

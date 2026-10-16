@@ -1,0 +1,17 @@
+| # | Feature | Input or Action | Expected Result | Actual Result | Pass/Fail |
+|---|---|---|---|---|---|
+| 1 | Add item | Enter a valid name, category, and quantity | Item is added and saved | Item was successfully added and saved | Pass
+| 2 | Load Inventory | Start with a missing inventory file | Program should start with zero items in inventory, upon adding and saving an item the program should create the missing file in the project's working directory | The program does not crash and creates a needed .txt file with the newly added items | Pass
+| 3 | View inventory | Select option (1) View inventory while the inventory is empty | Program should output `"No inventory items found."` | Program did output `"No inventory items found."` | Pass
+| 4 | Add item | Add an item with an empty item name | Program should reject the item during the naming portion and display an error | Program displays `"The item name cannot be empty"` and returns to the main menu | Pass
+| 5 | Add item | Add an item with a duplicate item name | Program should reject the item name and display that there already exists an item `{item}` | The program displays `"Rejected: A variation of '{item}' already exists."` | Pass
+| 6 | Add item | Add an item with a nonnumeric quantity | Program should reject the quantity with an error message | The program rejects the item, saying `"Quantity must be a whole number."` | Pass
+| 7 | Add item | Add an item with a negative quantity | Program should reject the quantity with an error message | The program rejects the item, saying `"Quantity cannot be negative."` | Pass
+| 8 | Update an item quantity | Update a valid item with a valid quantity | Program should accept the updated quantity and save it to the .txt file | The program accepts the change and updated the quantity to the desired amount | Pass
+| 9 | Update an item quantity | Input an invalid item number when prompted | Program should reject the invalid item number with an error message | The program rejects the number with the message `"Must be a valid item number."` | Pass
+| 10 | Remove an item | Remove a valid item | Program should accept the change and write the difference to the .txt file | The program accepted the change and displayed what item was removed | Pass
+| 11 | Search inventory | Perform a case-insensitive partial search | Should the term match partially to a present item, the program should respond with the correct item | The program displayed the correct item `"1. Raspberry Pi ... Quantity: 3"` when entering the search term `"rasp"` | Pass 
+| 12 | Search inventory | Searching when no matches exist | Program should display a message to the effect of `"No matching items"` | Program crashed when entering terms that do not match | Fail
+| 12* | Search inventory | Searching when no matches exist | Program should display a message to the effect of `"No matching items"` | Program now displays `"No items fond matching '{item}'."` | Pass
+| 13 | View inventory summary | Verifiying the inventory summary | Program should display a short summary of unique, low stock, and total items | Program correctly displays the inventory summary | Pass
+| 14 | save_inventory() | Restarting the program and confirming persistence | Program should keep all added/removed inventory items from a previous instance | Program correctly kept all added/removed inventory items from a previous instance | Pass
