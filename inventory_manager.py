@@ -19,17 +19,17 @@ def display_menu():
     print("6. View inventory summary")
     print("7. Exit")
 
-def add_item(inventory):
-    """Add an item/entry to the inventory"""
+##ADD ITEM SECTION
+#VALIDATE NEW ITEM HELPER
+def validate_new_item(inventory, name, category, quantity):
     illegal = "|"
-    name = input("Item's name: ").strip()
-    
+    name = name.strip()
+    category = category.strip()
+
     if not name:
-        print("The item name cannot be empty.")
-        return
-    elif illegal in name:
-        print("The item name may not contain '|'")
-        return
+        raise ValueError("The item name cannot be empty.")
+    if illegal in name:
+        raise ValueError("The item name may not contain '|'")
 
     #Ensuring no conflicting name values
     value_exists = any(
@@ -37,32 +37,46 @@ def add_item(inventory):
         for i in inventory
     )
     if value_exists:
-        print(f"Rejected: A variation of '{name}' already exists.")
-        return
-    
-    category = input("Item's category: ").strip()
-    
+        raise ValueError(f"Rejected: A variation of '{name}' already exists.")
+
     if not category:
-        print("The category cannot be empty.")
-        return
-    elif illegal in category:
-        print("The category may not contain '|'")
-        return
-    
+        raise ValueError("The category cannot be empty.")
+    if illegal in category:
+        raise ValueError("The category may not contain '|'")
+
     try:
-        quantity = int(input("Item's quantity: "))
+        quantity = int(quantity)
     except ValueError:
-        print("Quantity must be a whole number.")
-        return
-    if (quantity < 0):
-        print("Quantity cannot be negative.")
+        raise ValueError("Quantity must be a whole number.")
+    if quantity < 0:
+        raise ValueError("Quantity cannot be negative.")
+
+    return {"name": name, "category": category, "quantity": quantity}    
+
+def add_item(inventory):
+    """Add an item/entry to the inventory"""
+    name = input("Item's name: ")
+    category = input("Item's category: ")
+    quantity = input("Item's quantity: ")
+
+    try:
+        entry = validate_new_item(inventory, name, category, quantity)
+    except ValueError as error:
+        print(error)
         return
 
     #If all of those checks pass, add the new item to the inventory
-    entry = {"name": name, "category": category, "quantity": quantity}
     inventory.append(entry)
     save_inventory(inventory, INVENTORY_FILE)
     print("Item added succesfully.")
+
+##REMOVE ITEMS SECTION
+#REMOVE ITEM HELPER
+def remove_item_by_number(inventory, item_number):
+    if item_number < 1 or item_number > len(inventory):
+        return None
+    return inventory.pop(item_number - 1)
+
 
 def remove_item(inventory):
     """Removing an item from the passed in inventory"""
@@ -78,14 +92,25 @@ def remove_item(inventory):
         print("Item number must be a whole number.")
         return
         
-    if item < 1 or item > len(inventory):
+    removed_item = remove_item_by_number(inventory, item)
+
+    if removed_item is None:
         print("Must be a valid item number.")
         return
 
-
-    removed_item = inventory.pop(item - 1)
     print(f"Item removed: {removed_item['name']}")
     save_inventory(inventory, INVENTORY_FILE)
+
+##UPDATE QUANTITY SECTION
+#UPDATE ITEM QUANT HELPER
+def update_item_quantity(inventory, item_number, new_quantity):
+    if item_number < 1 or item_number > len(inventory):
+        raise ValueError("Must be a valid item number.")
+    if new_quantity < 0:
+        raise ValueError("New quantity cannot be negative.")
+
+    inventory[item_number - 1]["quantity"] = new_quantity
+    return inventory[item_number - 1]
 
 def update_quantity(inventory):
     """Updating the quantity of a given item number from the inventory"""
@@ -102,23 +127,35 @@ def update_quantity(inventory):
             print("Item number must be a whole number.")
             return
     
-    if item < 1 or item > len(inventory):
-        print("Must be a valid item number.")
-        return
-    
     try:
         new_quantity = int(input("Enter the new quantity: "))
     except ValueError:
         print("New quantity must be a whole number.")
         return
-    if (new_quantity < 0):
-        print("New quantity cannot be negative.")
+    
+    try:
+        updated_item = update_item_quantity(inventory, item, new_quantity)
+    except ValueError as error:
+        print(error)
         return
 
-    inventory[item - 1]["quantity"] = new_quantity
     save_inventory(inventory, INVENTORY_FILE)
     print(f"Updated '{inventory[item - 1]['name']}' to quantity {new_quantity}.")
 
+## SEARCH SECTION
+##SEARCH HELPER
+def find_matching_items(inventory, search_term):
+    search_term = search_term.strip().lower()
+    if not search_term:
+        return []
+    matches = []
+    for i in inventory:
+        if search_term.lower() in i["name"].lower():
+            matches.append(i)
+    return matches
+
+
+##SEARCH
 def search_inventory(inventory):
     """Searches the inventory given a full or partial item name"""
     name = input("Enter all or part of an item name you're searching for: ").strip()
@@ -127,10 +164,7 @@ def search_inventory(inventory):
         print("Search term cannot be empty.")
         return
 
-    matches = []
-    for i in inventory:
-        if name.lower() in i["name"].lower():
-            matches.append(i)
+    matches = find_matching_items(inventory, name)
 
     if not matches:
         print(f"No items found matching '{name}'.")
@@ -140,8 +174,9 @@ def search_inventory(inventory):
     for number, item in enumerate(matches, start=1):
         print(f"{number}. {item["name"]} | {item["category"]} | Quantity: {item["quantity"]}")
 
-def display_summary(inventory):
-    """Displays general summarized information of a given inventory"""
+##SUMMARY SECTION
+#CALCULATE SUMMARY HELPER
+def calculate_summary(inventory):
     low_stock_threshold = 5
 
     unique = len(inventory)
@@ -161,15 +196,26 @@ def display_summary(inventory):
             low_stock_items += 1
 
         category = item["category"].lower()
-        category_counts[category] += 1
+        category_counts[category] += 1    
+
+    return {
+        "unique_items": unique,
+        "total_quantity": total_quantity,
+        "low_stock_items": low_stock_items,
+        "category_counts": category_counts,
+    }
+
+def display_summary(inventory):
+    """Displays general summarized information of a given inventory"""
+    summary = calculate_summary(inventory)
 
     print("\nInventory Summary")
-    print(f"Unique items: {unique}")
-    print(f"Total quantity: {total_quantity}")
-    print(f"Low-stock items: {low_stock_items}")
+    print(f"Unique items: {summary['unique_items']}")
+    print(f"Total quantity: {summary['total_quantity']}")
+    print(f"Low-stock items: {summary['low_stock_items']}")
 
     print("\nItems per category:")
-    for category, count in category_counts.items():
+    for category, count in summary["category_counts"].items():
         print(f"{category}: {count}")
     
 
