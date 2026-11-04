@@ -123,7 +123,7 @@ def test_search_no_match_and_blank_terms_return_empty(inventory):
     assert find_matching_items(inventory, "Keyboard") == []
     assert find_matching_items(inventory, "") == []
     assert find_matching_items(inventory, "     ") == []
-    
+
 ##REMOVE SECTION
 #11.
 def test_remove_first_middle_last(inventory):
@@ -153,3 +153,39 @@ def test_remove_rejects_invalid_item_number(inventory, item_number):
     #Assert/Act
     assert remove_item_by_number(inventory, item_number) is None
     assert len(inventory) == 4
+
+##UPDATE SECTIONN
+#13.
+def test_update_changes_only_target_and_accepts_zero(inventory):
+    #Arrange: inventory fixture
+    #Act
+    update_item_quantity(inventory, 2, 40)
+    update_item_quantity(inventory, 1, 0)
+
+    #Assert
+    assert inventory[2 - 1]["quantity"] == 40
+    assert inventory[1 - 1]["quantity"] == 0
+
+#14.
+@pytest.mark.parametrize(
+    "item_number",
+    [0, -1, 5],
+    ids=[
+        "zero", "negative", "past_end"
+    ],
+)
+def test_update_rejects_invalid_item_number(inventory, item_number):
+    #Arrange: inventory fixture + item_number from parametrize
+    #Act/Assert
+    with pytest.raises(ValueError):
+        update_item_quantity(inventory, item_number, 10)
+
+#15.
+def test_update_rejects_negative_quantity(inventory):
+    #Arrange: inventory fixture
+    #Act/Assert
+    with pytest.raises(ValueError):
+        update_item_quantity(inventory, 1, -5)
+
+    #Assert
+    assert inventory[0]["quantity"] == 8
