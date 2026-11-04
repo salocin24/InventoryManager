@@ -78,3 +78,25 @@ def test_save_writes_pipe_format(tmp_path, inventory):
         "USB Cable|Electronics|12\n"
     )
 
+#6.
+def test_save_empty_inventory_writes_empty_file(tmp_path):
+    #Arrange
+    test_file = tmp_path / "inv.txt"
+    
+    #Act
+    save_inventory([], test_file)
+
+    #Assert
+    assert test_file.read_text() == ""
+
+#7. 
+def test_save_then_load_round_trip(tmp_path, inventory):
+    #Arrange
+    test_file = tmp_path / "inv.txt"
+    
+    #Act
+    save_inventory(inventory, test_file)
+    result = load_inventory(test_file)
+
+    #Assert
+    assert result == inventory
