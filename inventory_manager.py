@@ -241,7 +241,7 @@ def load_inventory(filename):
                 if not line.strip():
                     continue
                 split = line.strip().split("|")
-                entry = {"name": split[0], "category": split[1], "quantity": split[2]}
+                entry = {"name": split[0], "category": split[1], "quantity": int(split[2])}
                 inventory.append(entry)
     except FileNotFoundError:
         return []
