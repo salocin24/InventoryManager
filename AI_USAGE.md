@@ -53,3 +53,27 @@ The function asks for a search term and strips any spaces off. If nothing is lef
 ### `display_summary()`
 
 The unique item count is just the length of the inventory list and to count items per category, the function first loops through the inventory and adds every category to a dictionary with a starting value of 0. The .lower() function is performed on all categories so "Electronics" and "electronics" count as the same one. A second loop then goes through each item: it converts the quantity to an `int`, adds it to the total, counts the item as low-stock if its quantity is under 5, and adds 1 to its category's count. Finally, it prints the totals and each category with its count nicely.
+
+## Part D: Automated Test Suite
+
+For the pytest suite in `test_inventory_manager.py`, I used Claude to plan and draft tests against the Part D requirements. Specifically:
+
+- **Test ideas:** Claude gave me a plan for which tests to write for each required behavior (loading, saving, search, remove, update, add-item validation, and summary).
+- **Sample data:** Claude suggested the sample inventory data for my `inventory` fixture, including adding a fourth item so the fixture met the requirements (more than one category and a low-stock item).
+- **Questions:** Before writing tests, I asked whether casting quantity to `int` inside `load_inventory()` would break anything. I made that change myself. I also asked why my first test failed when comparing against the fixture. The cause was that I hadn't listed `inventory` as a test parameter.
+- **Pull request:** Claude drafted the pull request description, which I checked against my final test run.
+
+### Example Prompts
+
+1. *"Within the load_inventory() method, If i cast quantity to an int when im in the process of adding an entry to the array, will that break anything?"*
+
+### Suggestions Rejected or Modified
+
+- **List comprehension in an assert:** I replaced a one-line list comprehension in the blank-lines test with separate assertions on each item's name, which are easier for me to read.
+- **Update test:** I simplified Claude's version of `test_update_changes_only_target_and_accepts_zero` to check the two updated quantities directly.
+- **Fixture data:** I changed the categories in my fixture from Claude's suggested version to match my own test data.
+
+### Part D Verification
+
+- I ran the full suite with `pytest -v`. It collects 32 tests and all 32 pass.
+- I confirmed every file test uses `tmp_path`, so the real `inventory.txt` is never changed.
