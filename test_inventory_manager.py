@@ -189,3 +189,43 @@ def test_update_rejects_negative_quantity(inventory):
 
     #Assert
     assert inventory[0]["quantity"] == 8
+
+##ADD ITEM VALIDATION
+#16.
+def test_validate_accepts_normal_item(inventory):
+    #Arrange: inventory fixture
+    #Act
+    result = validate_new_item(inventory, " Drill ", " Tools ", "7")
+
+    #Assert
+    assert result == {"name": "Drill", "category": "Tools", "quantity": 7}
+
+#17.
+@pytest.mark.parametrize(
+    "name, category, quantity",
+    [
+        ("", "Tools", "3"),
+        ("Drill", "", "3"),
+        ("Dr|ll", "Tools", "3"),
+        ("Drill", "To|ols", "3"),
+        ("Drill", "Tools", "-1"),
+        ("Drill", "Tools", "abc"),
+        ("Raspberry Pi", "Tools", "3"),
+        ("RASPBERRY PI", "Tools", "3"),
+    ],
+    ids=[
+        "empty_name",
+        "empty_category",
+        "pipe_in_name",
+        "pipe_in_category",
+        "negative_quantity",
+        "nonnumeric_quantity",
+        "duplicate_name",
+        "duplicate_different_case",
+    ],
+)
+def test_validate_rejects_invalid_item(inventory, name, category, quantity):
+    #Arrange: inventory fixture + bad values from parametrize
+    #Act/Assert
+    with pytest.raises(ValueError):
+        validate_new_item(inventory, name, category, quantity)
