@@ -229,3 +229,40 @@ def test_validate_rejects_invalid_item(inventory, name, category, quantity):
     #Act/Assert
     with pytest.raises(ValueError):
         validate_new_item(inventory, name, category, quantity)
+
+##SUMMARY SECTION
+#18.
+def test_summary_values(inventory):
+    #Arrange: inventory fixture
+    #Act
+    summary = calculate_summary(inventory)
+
+    #Assert
+    assert summary["unique_items"] == 4
+    assert summary["total_quantity"] == 48
+    assert summary["low_stock_items"] == 1
+    assert summary["category_counts"] == {"electronics": 3, "office supplies": 1}
+
+#19.
+def test_summary_empty_inventory():
+    #Arrange: empty inventory
+    #Act/Assert
+    assert calculate_summary([]) == {
+        "unique_items": 0,
+        "total_quantity": 0,
+        "low_stock_items": 0,
+        "category_counts": {},
+    }
+
+#20.
+@pytest.mark.parametrize(
+    "quantity, expected_low",
+    [(4, 1), (5, 0)],
+    ids=["four_is_low", "five_is_not_low"],
+)
+def test_low_stock_boudary(quantity, expected_low):
+    #Arrange
+    item = [{"name": "Widget", "category" : "Parts", "quantity": quantity}]
+
+    #Act/Assert
+    assert calculate_summary(item)["low_stock_items"] == expected_low
