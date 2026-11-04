@@ -123,3 +123,33 @@ def test_search_no_match_and_blank_terms_return_empty(inventory):
     assert find_matching_items(inventory, "Keyboard") == []
     assert find_matching_items(inventory, "") == []
     assert find_matching_items(inventory, "     ") == []
+    
+##REMOVE SECTION
+#11.
+def test_remove_first_middle_last(inventory):
+    #Arrange
+    first = list(inventory)
+    middle = list(inventory)
+    last = list(inventory)
+
+    #Act
+    remove_item_by_number(first, 1)
+    remove_item_by_number(middle, 2)
+    remove_item_by_number(last, 4)
+
+    #Assert
+    assert [i["name"] for i in first] == ["Printer Paper", "Raspberry Pi", "USB Cable"]
+    assert [i["name"] for i in middle] == ["Laptop Charger", "Raspberry Pi", "USB Cable"]
+    assert [i["name"] for i in last] == ["Laptop Charger", "Printer Paper", "Raspberry Pi"]
+
+#12.
+#Arrange
+@pytest.mark.parametrize(
+    "item_number",
+    [0, -1, 5],
+    ids=["zero", "negative", "past_end"],
+)
+def test_remove_rejects_invalid_item_number(inventory, item_number):
+    #Assert/Act
+    assert remove_item_by_number(inventory, item_number) is None
+    assert len(inventory) == 4
