@@ -100,3 +100,26 @@ def test_save_then_load_round_trip(tmp_path, inventory):
 
     #Assert
     assert result == inventory
+
+##SEARCH SECTION
+#8.
+def test_search_exact_and_partial(inventory):
+    #Arrange: inventory fixture
+    #Act/Assert
+    assert find_matching_items(inventory, "Raspberry Pi") == [inventory[2]]
+    assert find_matching_items(inventory, "Charg") == [inventory[0]]
+
+#9.
+def test_search_ignores_case_and_returns_multiple(inventory):
+    #Arrange: inventory fixture
+    #Act/Assert
+    #should match with laptop charger and printer paper
+    assert find_matching_items(inventory, "AP") == [inventory[0], inventory[1]]
+
+#10.
+def test_search_no_match_and_blank_terms_return_empty(inventory):
+    #Arrange: inventory fixture
+    #Act/Assert
+    assert find_matching_items(inventory, "Keyboard") == []
+    assert find_matching_items(inventory, "") == []
+    assert find_matching_items(inventory, "     ") == []
